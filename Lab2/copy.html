@@ -81,23 +81,22 @@
 
         if (this.y + this.radius >= canvasHeight || this.y - this.radius <= 0) {
           console.log("Ball hit the canvas!");
-        //   this.ySpeed = -this.ySpeed;
-          console.log(-this.ySpeed)
+          this.ySpeed = -this.ySpeed;
         }
 
-        // if (this.x + this.radius >= canvasWidth || this.x - this.radius <= 0) {
-        //   console.log("Ball hit the canvas!");
-        //   this.xSpeed = -this.xSpeed;
-        // }
+        if (this.x + this.radius >= canvasWidth || this.x - this.radius <= 0) {
+          console.log("Ball hit the canvas!");
+          this.xSpeed = -this.xSpeed;
+        }
 
         this.y += this.ySpeed;
-        // this.x += this.xSpeed;
+        this.x += this.xSpeed;
       }
 
     }
 
     //Creating instance of the ball
-    ball1 = new Ball(100, 100, 1, 1, 10);
+    ball1 = new Ball(100, 100, 14, 14, 10);
     ball2 = new Ball(180, 100, 1, 1, 30);
 
 
@@ -106,7 +105,7 @@
       ctx.clearRect(0, 0, 350, 300);
       ball1.draw();
       ball2.draw();
-
+      
       ball1.move();
       ball2.move();
 
