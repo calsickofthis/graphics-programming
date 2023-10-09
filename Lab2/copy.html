@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="=viewport" content="width=device-width, initial-scale1.0">
+  <title>Canvas</title>
+
+  <style type="text/css">
+    canvas {
+      border: 3px solid black;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Jakub Szkup</h1>
+
+  <canvas id="canvas-for-ball" width="350" height="300"></canvas>
+
+  <script type="text/javascript">
+
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvas-for-ball");
+
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
+    var canvasWidth = canvas.getBoundingClientRect().width;
+    var canvasHeight = canvas.getBoundingClientRect().height;
+
+    class Ball {
+      constructor(y, x, ySpeed, xSpeed, radius) {
+        this.y = y;
+        this.x = x;
+        this.ySpeed = ySpeed; //vertical velocity
+        this.xSpeed = xSpeed; //horizontal velocity
+        this.radius = radius;
+        
+      }
+
+      //Draw circle function//
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = "orange";
+        ctx.stroke();
+
+        //Rotation of the ball//
+        var rotation=this.radius*(Math.PI/180);
+
+        //Draw the X
+        //Bottom Right
+        var x1 = this.x + (this.radius * Math.cos(((7 * Math.PI) / 4)+rotation));
+        var y1 = this.y + (this.radius * Math.sin(((7 * Math.PI) / 4)+rotation));
+        ctx.moveTo(x1,y1);
+        
+
+        //Top left
+        var x2 = this.x + (this.radius * Math.cos(((3 * Math.PI) / 4)+rotation));
+        var y2 = this.y + (this.radius * Math.sin(((3 * Math.PI) / 4)+rotation));
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = "orange";
+        ctx.stroke();
+
+        var x3 = this.x + (this.radius * Math.cos(((5 * Math.PI) / 4)+rotation));
+        var y3 = this.y + (this.radius * Math.sin(((5 * Math.PI) / 4)+rotation));
+        ctx.moveTo(x3,y3);
+
+        var x4 = this.x + (this.radius * Math.cos(((1 * Math.PI) / 4)+rotation));
+        var y4 = this.y + (this.radius * Math.sin(((1 * Math.PI) / 4)+rotation));
+        ctx.lineTo(x4,y4);
+        ctx.strokeStyle = "orange";
+        ctx.stroke();
+
+      }
+
+      // move  function -Makes ball bounce diagonally 
+      move() {
+
+        if (this.y + this.radius >= canvasHeight || this.y - this.radius <= 0) {
+          console.log("Ball hit the canvas!");
+        //   this.ySpeed = -this.ySpeed;
+          console.log(-this.ySpeed)
+        }
+
+        // if (this.x + this.radius >= canvasWidth || this.x - this.radius <= 0) {
+        //   console.log("Ball hit the canvas!");
+        //   this.xSpeed = -this.xSpeed;
+        // }
+
+        this.y += this.ySpeed;
+        // this.x += this.xSpeed;
+      }
+
+    }
+
+    //Creating instance of the ball
+    ball1 = new Ball(100, 100, 1, 1, 10);
+    ball2 = new Ball(180, 100, 1, 1, 30);
+
+
+    // A function to repeat every time the animation loops.
+    function repeatme() {
+      ctx.clearRect(0, 0, 350, 300);
+      ball1.draw();
+      ball2.draw();
+
+      ball1.move();
+      ball2.move();
+
+      
+
+      window.requestAnimationFrame(repeatme);
+    }
+
+    // Get the animation going.
+    repeatme();
+
+  </script>
+
+</body>
+
+</html>
