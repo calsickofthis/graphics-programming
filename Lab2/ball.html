@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
+
+  <style type="text/css">
+    body {
+      background-color: white;
+    }
+
+    canvas {
+      border: 1px dashed black;
+      width: 400px;
+      height: 400px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Caolán Maguire</h1>
+  <canvas id="canvas-for-ball"></canvas>
+  <script type="text/javascript">
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvas-for-ball");
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
+
+    // Create an object:
+    // Constructor function for Person objects
+    class Ball {
+      constructor(name, year) {
+        this.name = name;
+        this.year = year;
+      }
+
+      draw() {
+        ctx.clearRect(0, 0, 400, 400)
+
+        ctx.beginPath();
+
+        ctx.arc(50, y, 3, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        // Update the y location.
+        // if (plusorminus == 0) {
+        //   y -= 1;
+        // } else {
+        y += 1;
+        // }
+        console.log('draw')
+        // window.requestAnimationFrame(this.draw);
+      }
+    }
+    // const ball = {
+    //   x_position: 0,
+    //   y_position: 0,
+    //   x_velocity: 0,
+    //   y_velocity: 0,
+    //   radius: 0,
+
+    //   // The move function should increments the xpos and ypos co-ordinates of the ball by the x and y velocities.
+    //   move: function () {
+    //     console.log('move')
+    //   },
+    //   draw: function () {
+    //     ctx.clearRect(0, 0, 400, 400)
+
+    //     ctx.beginPath();
+
+    //     ctx.arc(50, y, 3, 0, 2 * Math.PI);
+    //     ctx.stroke();
+
+    //     // Update the y location.
+    //     if (plusorminus == 0) {
+    //       y -= 1;
+    //     } else {
+    //       y += 1;
+    //     }
+    //     console.log('draw')
+    //     // return this.firstName + " " + this.lastName;
+    //   }
+    // };
+
+
+    // The vertical location of the ball.
+    var y = 10;
+    var bottom_hit = 0;
+
+    // function draw(plusorminus) {
+    // ctx.clearRect(0, 0, 400, 400)
+
+    // ctx.beginPath();
+
+    // ctx.arc(50, y, 3, 0, 2 * Math.PI);
+    // ctx.stroke();
+
+    // // Update the y location.
+    // if (plusorminus == 0) {
+    //   y -= 1;
+    // } else {
+    //   y += 1;
+    // }
+    // }
+
+    // A function to repeat every time the animation loops.
+    function repeatme() {
+      // Draw the ball (stroked, not filled).
+
+      caolan = new Ball();
+
+      caolan.draw();
+
+      if (bottom_hit != 0) {
+        // draw(0);
+        caolan.draw();
+        if (y == 10) {
+          bottom_hit = 0;
+        }
+      } else {
+        if (y < 145) {
+          caolan.draw(1)
+        } else {
+          bottom_hit = 1;
+        }
+      }
+
+
+      window.requestAnimationFrame(repeatme);
+    }
+
+    // Get the animation going.
+    repeatme();
+    //   </script>
+
+</body>
+
+</html>
