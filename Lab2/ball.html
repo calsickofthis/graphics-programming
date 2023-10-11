@@ -58,24 +58,26 @@
 
         //Draw the X
         //Bottom Right
-        var x1 = this.x_position + (this.radius * Math.cos((((7 + this.rotation) * Math.PI) / (4 + this.rotation))));
-        var y1 = this.y_position + (this.radius * Math.sin((((7 + this.rotation) * Math.PI) / (4 + this.rotation))));
+        var x1 = this.x_position + (this.radius * Math.cos(((7 * Math.PI) / 4)));
+        var y1 = this.y_position + (this.radius * Math.sin(((7 * Math.PI) / 4)));
         ctx.moveTo(x1,y1);
         
 
         //Top left
-        var x2 = this.x_position + (this.radius * Math.cos((((3 + this.rotation) * Math.PI) / 4)));
-        var y2 = this.y_position + (this.radius * Math.sin((((3 + this.rotation) * Math.PI) / 4)));
+        var x2 = this.x_position + (this.radius * Math.cos(((3 * Math.PI) / 4)));
+        var y2 = this.y_position + (this.radius * Math.sin(((3 * Math.PI) / 4)));
         ctx.lineTo(x2, y2);
         ctx.strokeStyle = "red";
+        // ctx.rotate(2)
         ctx.stroke();
 
-        var x3 = this.x_position + (this.radius * Math.cos((((5 + this.rotation) * Math.PI) / 4)));
-        var y3 = this.y_position + (this.radius * Math.sin((((5 + this.rotation) * Math.PI) / 4)));
+        var x3 = this.x_position + (this.radius * Math.cos(((5 * Math.PI) / 4)));
+        var y3 = this.y_position + (this.radius * Math.sin(((5 * Math.PI) / 4)));
         ctx.moveTo(x3,y3);
 
         var x4 = this.x_position + (this.radius * Math.cos(((1 * Math.PI) / 4)));
         var y4 = this.y_position + (this.radius * Math.sin(((1 * Math.PI) / 4)));
+
         ctx.lineTo(x4,y4);
         ctx.strokeStyle = "red";
         ctx.stroke();
