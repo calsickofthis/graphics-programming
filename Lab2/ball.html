@@ -38,6 +38,9 @@
 
     var oldTime = getTime();
 
+
+    var angle = 0;
+
     function getTime() {
       return (new Date()).getTime();
     }
@@ -66,7 +69,8 @@
         oldTime = newTime;
 
         ctx.beginPath();
-        ctx.arc(this.x_position, this.y_position, this.radius, startAngle + currentAngle, endAngle + currentAngle, false);//this.x_position, this.y_position, this.radius, 0, 2 * Math.PI);
+        // ctx.arc(this.x_position, this.y_position, this.radius, 10 , 0 , );//this.x_position, this.y_position, this.radius, 0, 2 * Math.PI);
+        ctx.arc(this.x_position, this.y_position, this.radius, 0, 2 * Math.PI, true);
         ctx.strokeStyle = "red";
         ctx.lineWidth = 5;
         // ctx.rotate(2 * Math.PI / 180)
@@ -74,6 +78,7 @@
 
 
         var theta = 0.5
+        
 
 
         //Draw the X
@@ -81,51 +86,16 @@
         var x1 = this.x_position + (this.radius * Math.cos(((7 * Math.PI) / 4)));
         var y1 = this.y_position + (this.radius * Math.sin(((7 * Math.PI) / 4)));
         // ctx.moveTo(x1, y1);
-        var xo = this.x_position - (x1 - this.x_position)
-        var yo = this.y_position - (y1 - this.y_position)
-        // ctx.moveTo(xo,yo);
 
         //Top left
         var x2 = this.x_position + (this.radius * Math.cos(((3 * Math.PI) / 4)));
         var y2 = this.y_position + (this.radius * Math.sin(((3 * Math.PI) / 4)));
 
-        // var xo = this.x_position - (x2 - this.x_position)
-        // var yo = this.y_position - (y2 - this.y_position)
-        // ctx.moveTo(xo,yo);
-        // ctx.lineTo(x2, y2);
-
-        ctx.lineTo(x2 + this.radius * Math.cos(theta), y2 + this.radius * Math.sin(theta));
-
-        // console.log('x2 y2')
-        // console.log(x2,y2)
-        // console.log('x1, y1')
-        // console.log(xo,yo)
-
-        console.log(this.x_position, this.y_position)
-        ctx.beginPath();
-        ctx.arc(this.x_position, this.y_position, 1, 0, 2 * Math.PI, true);
-        ctx.strokeStyle = 'black'
+        // ctx.lineTo(x2,y2)
         ctx.stroke();
 
-        // ctx.beginPath();
-        // ctx.arc(x1, y1, 1, 0, 2 * Math.PI, true);
-        // ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(x2, y2, 1, 0, 2 * Math.PI, true);
-        ctx.stroke();
-
-        // ctx.beginPath();
-        // ctx.arc(xo, yo, 1, 0, 2 * Math.PI, true);
-        // ctx.stroke();
-
-
-        ctx.strokeStyle = "red";
-        // ctx.rotate(2)
-        ctx.stroke();
-
-        // var x3 = this.x_position + (this.radius * Math.cos(((5 * Math.PI) / 4)));
-        // var y3 = this.y_position + (this.radius * Math.sin(((5 * Math.PI) / 4)));
+        var x3 = this.x_position + (this.radius * Math.cos(((5 * Math.PI) / 4)));
+        var y3 = this.y_position + (this.radius * Math.sin(((5 * Math.PI) / 4)));
         // ctx.moveTo(x3, y3);
 
         var x4 = this.x_position + (this.radius * Math.cos(((1 * Math.PI) / 4)));
@@ -133,8 +103,41 @@
 
         // ctx.lineTo(x4, y4);
         // ctx.lineTo(x4 + this.radius * Math.cos(theta), y4 + this.radius * Math.sin(theta));
-        ctx.strokeStyle = "red";
         ctx.stroke();
+
+        angle = (angle + 1) % 360;
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.save();
+        ctx.fillStyle = "black";
+
+        ctx.translate(this.x_position, this.y_position); // First translate the context to the center you wish to rotate around.
+        ctx.rotate(angle * Math.PI / 180); // Then do the actual rotation.
+        ctx.translate(- this.x_position, - this.y_position); // Then translate the context back.
+
+        ctx.beginPath();
+        ctx.moveTo(x1,y1);
+        ctx.lineTo(x2, y2);
+        console.log(x1,y1,x2,y2)
+        ctx.stroke()
+        ctx.moveTo(x3, y3);
+        ctx.lineTo(x4, y4);
+        ctx.stroke()
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+
+
+        // ctx.beginPath();
+        // ctx.arc(101, 250, 5, 0, 2 * Math.PI, true);
+        // ctx.strokeStyle = 'black'
+        // ctx.stroke();
+        
+        // ctx.beginPath();
+        // ctx.arc(this.x_position, this.y_position, 5, 0, 2 * Math.PI, true);
+        // ctx.strokeStyle = 'black'
+        // ctx.stroke();
 
         this.rotation += 0.2
 
