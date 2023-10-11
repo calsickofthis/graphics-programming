@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <title>simple</title>
+</head>
+
+<body>
+    <canvas id="canvas" id="canvas" width="418" height="418" style="border:1px solid #d3d3d3"></canvas>
+    <Script>
+
+        var canvas = document.getElementById("canvas");
+        var dc = canvas.getContext("2d");
+        var angle = 0;
+        window.setInterval(function () {
+            angle = (angle + 1) % 360;
+            dc.clearRect(0, 0, canvas.width, canvas.height);
+
+
+            dc.save();
+            dc.fillStyle = "black";
+
+            dc.translate(105, 200); // First translate the context to the center you wish to rotate around.
+            dc.rotate(angle * Math.PI / 180); // Then do the actual rotation.
+            dc.translate(-105, -200); // Then translate the context back.
+
+            dc.beginPath();
+            dc.moveTo(100, 100);
+            dc.lineTo(110, 100);
+            dc.lineTo(110, 300);
+            dc.lineTo(100, 300);
+            dc.closePath();
+            dc.fill();
+
+            dc.restore();
+
+            dc.beginPath();
+            dc.arc(105, 200, 12, 0, 2 * Math.PI, true);
+            dc.strokeStyle = 'black'
+            dc.stroke();
+
+        }, 5);
+    </script>
+</body>
+
+</html>

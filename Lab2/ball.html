@@ -31,6 +31,17 @@
     var canvasWidth = canvas.getBoundingClientRect().width;
     var canvasHeight = canvas.getBoundingClientRect().height;
 
+
+    var startAngle = (2 * Math.PI);
+    var endAngle = (Math.PI * 1.5);
+    var currentAngle = 0;
+
+    var oldTime = getTime();
+
+    function getTime() {
+      return (new Date()).getTime();
+    }
+
     // var Direction = true;
 
     // Create an object:
@@ -49,52 +60,101 @@
       draw() {
         // ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
+        var newTime = getTime(),
+          diff = newTime - oldTime;
+
+        oldTime = newTime;
+
         ctx.beginPath();
-        ctx.arc(this.x_position, this.y_position, this.radius, 0, 2 * Math.PI);
+        ctx.arc(this.x_position, this.y_position, this.radius, startAngle + currentAngle, endAngle + currentAngle, false);//this.x_position, this.y_position, this.radius, 0, 2 * Math.PI);
         ctx.strokeStyle = "red";
         ctx.lineWidth = 5;
         // ctx.rotate(2 * Math.PI / 180)
         ctx.stroke();
 
+
+        var theta = 0.5
+
+
         //Draw the X
         //Bottom Right
         var x1 = this.x_position + (this.radius * Math.cos(((7 * Math.PI) / 4)));
         var y1 = this.y_position + (this.radius * Math.sin(((7 * Math.PI) / 4)));
-        ctx.moveTo(x1,y1);
-        
+        // ctx.moveTo(x1, y1);
+        var xo = this.x_position - (x1 - this.x_position)
+        var yo = this.y_position - (y1 - this.y_position)
+        // ctx.moveTo(xo,yo);
 
         //Top left
         var x2 = this.x_position + (this.radius * Math.cos(((3 * Math.PI) / 4)));
         var y2 = this.y_position + (this.radius * Math.sin(((3 * Math.PI) / 4)));
-        ctx.lineTo(x2, y2);
+
+        // var xo = this.x_position - (x2 - this.x_position)
+        // var yo = this.y_position - (y2 - this.y_position)
+        // ctx.moveTo(xo,yo);
+        // ctx.lineTo(x2, y2);
+
+        ctx.lineTo(x2 + this.radius * Math.cos(theta), y2 + this.radius * Math.sin(theta));
+
+        // console.log('x2 y2')
+        // console.log(x2,y2)
+        // console.log('x1, y1')
+        // console.log(xo,yo)
+
+        console.log(this.x_position, this.y_position)
+        ctx.beginPath();
+        ctx.arc(this.x_position, this.y_position, 1, 0, 2 * Math.PI, true);
+        ctx.strokeStyle = 'black'
+        ctx.stroke();
+
+        // ctx.beginPath();
+        // ctx.arc(x1, y1, 1, 0, 2 * Math.PI, true);
+        // ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(x2, y2, 1, 0, 2 * Math.PI, true);
+        ctx.stroke();
+
+        // ctx.beginPath();
+        // ctx.arc(xo, yo, 1, 0, 2 * Math.PI, true);
+        // ctx.stroke();
+
+
         ctx.strokeStyle = "red";
         // ctx.rotate(2)
         ctx.stroke();
 
-        var x3 = this.x_position + (this.radius * Math.cos(((5 * Math.PI) / 4)));
-        var y3 = this.y_position + (this.radius * Math.sin(((5 * Math.PI) / 4)));
-        ctx.moveTo(x3,y3);
+        // var x3 = this.x_position + (this.radius * Math.cos(((5 * Math.PI) / 4)));
+        // var y3 = this.y_position + (this.radius * Math.sin(((5 * Math.PI) / 4)));
+        // ctx.moveTo(x3, y3);
 
         var x4 = this.x_position + (this.radius * Math.cos(((1 * Math.PI) / 4)));
         var y4 = this.y_position + (this.radius * Math.sin(((1 * Math.PI) / 4)));
 
-        ctx.lineTo(x4,y4);
+        // ctx.lineTo(x4, y4);
+        // ctx.lineTo(x4 + this.radius * Math.cos(theta), y4 + this.radius * Math.sin(theta));
         ctx.strokeStyle = "red";
         ctx.stroke();
 
         this.rotation += 0.2
+
+        currentAngle += diff * 0.001;
+
+        currentAngle %= 2 * Math.PI;
+
+        // console.log((this.radius * Math.cos(((3 * Math.PI) / 4))));
 
       }
 
       move() {
 
         if (this.y_position + this.radius >= canvasHeight || this.y_position - this.radius <= 0) {
-          console.log("Ball hit the canvas!");
+          // console.log("Ball hit the canvas!");
           this.y_velocity = -this.y_velocity;
         }
 
         if (this.x_position + this.radius >= canvasWidth || this.x_position - this.radius <= 0) {
-          console.log("Ball hit the canvas!");
+          // console.log("Ball hit the canvas!");
           this.x_velocity = -this.x_velocity;
         }
 
