@@ -56,10 +56,12 @@
         this.radius = radius;
         this.Direction = true;
         this.rotation = 0.2;
+        
       }
 
       draw() {
 
+        console.log(this.Direction);
         var newTime = getTime(),
           diff = newTime - oldTime;
 
@@ -92,7 +94,11 @@
 
         ctx.stroke();
 
-        angle = (angle + 1) % 360;
+        if(this.Direction == true){
+          angle = (angle + 1) % 360;
+        }else{
+          angle = (angle - 1) % 360;
+        }
 
         ctx.save();
         ctx.fillStyle = "black";
@@ -104,7 +110,7 @@
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
-        console.log(x1, y1, x2, y2)
+        // console.log(x1, y1, x2, y2)
         ctx.stroke()
         ctx.moveTo(x3, y3);
         ctx.lineTo(x4, y4);
@@ -125,13 +131,15 @@
       move() {
 
         if (this.y_position + this.radius >= canvasHeight || this.y_position - this.radius <= 0) {
-          console.log("Ball hit side of canvas");
+          // console.log("Ball hit side of canvas");
           this.y_velocity = -this.y_velocity;
+          this.Direction = !this.Direction;
         }
 
         if (this.x_position + this.radius >= canvasWidth || this.x_position - this.radius <= 0) {
-          console.log("Ball hit side of canvas");
+          // console.log("Ball hit side of canvas");
           this.x_velocity = -this.x_velocity;
+          this.Direction = !this.Direction;
         }
 
         this.y_position += this.y_velocity;
@@ -146,6 +154,8 @@
     three = new Ball(15, 120, 9, 9, 10);
     four = new Ball(140, 40, 5, 1, 20);
 
+    five = new Ball(15, 220, 9, 9, 10);
+    six = new Ball(140, 140, 5, 1, 100);
     // A function to repeat every time the animation loops.
     function repeatme() {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
@@ -153,11 +163,15 @@
       two.draw();
       three.draw();
       four.draw();
+      five.draw();
+      six.draw();
 
       one.move();
       two.move();
       three.move();
       four.move();
+      five.move();
+      six.move();
 
       window.requestAnimationFrame(repeatme);
     }
