@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
+
+  <style type="text/css">
+    body {
+      background-color: white;
+    }
+
+    canvas {
+      border: 3px dashed black;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Caolán Maguire</h1>
+  <canvas id="canvas-for-ball" width="350" height="300"></canvas>
+  <script type="text/javascript">
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvas-for-ball");
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
+
+    var canvasWidth = canvas.getBoundingClientRect().width;
+    var canvasHeight = canvas.getBoundingClientRect().height;
+
+
+    var startAngle = (2 * Math.PI);
+    var endAngle = (Math.PI * 1.5);
+    var currentAngle = 0;
+
+    var oldTime = getTime();
+
+
+    var angle = 0;
+
+    function getTime() {
+      return (new Date()).getTime();
+    }
+
+    // var Direction = true;
+
+    // Create an object:
+    // Constructor function for Person objects
+    class Ball {
+      constructor(x_position, y_position, x_velocity, y_velocity, radius) {
+        this.x_position = x_position;
+        this.y_position = y_position;
+        this.x_velocity = x_velocity;
+        this.y_velocity = y_velocity;
+        this.radius = radius;
+        this.Direction = true;
+        this.rotation = 0.2;
+        
+      }
+
+      draw() {
+
+        console.log(this.Direction);
+        var newTime = getTime(),
+          diff = newTime - oldTime;
+
+        oldTime = newTime;
+
+        ctx.beginPath();
+        ctx.arc(this.x_position, this.y_position, this.radius, 0, 2 * Math.PI, true);
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        var theta = 0.5
+
+        //Draw the X
+        //Bottom Right
+        var x1 = this.x_position + (this.radius * Math.cos(((7 * Math.PI) / 4)));
+        var y1 = this.y_position + (this.radius * Math.sin(((7 * Math.PI) / 4)));
+
+        //Top left
+        var x2 = this.x_position + (this.radius * Math.cos(((3 * Math.PI) / 4)));
+        var y2 = this.y_position + (this.radius * Math.sin(((3 * Math.PI) / 4)));
+
+        ctx.stroke();
+
+        var x3 = this.x_position + (this.radius * Math.cos(((5 * Math.PI) / 4)));
+        var y3 = this.y_position + (this.radius * Math.sin(((5 * Math.PI) / 4)));
+
+        var x4 = this.x_position + (this.radius * Math.cos(((1 * Math.PI) / 4)));
+        var y4 = this.y_position + (this.radius * Math.sin(((1 * Math.PI) / 4)));
+
+        ctx.stroke();
+
+        if(this.Direction == false){
+          angle = (angle + 1) % 360;
+        }else{
+          angle = (angle - 1) % 360;
+        }
+
+        ctx.save();
+        ctx.fillStyle = "black";
+
+        ctx.translate(this.x_position, this.y_position); // First translate the context to the center you wish to rotate around.
+        ctx.rotate(angle * Math.PI / 180); // Then do the actual rotation.
+        ctx.translate(- this.x_position, - this.y_position); // Then translate the context back.
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        // console.log(x1, y1, x2, y2)
+        ctx.stroke()
+        ctx.moveTo(x3, y3);
+        ctx.lineTo(x4, y4);
+        ctx.stroke()
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+
+        this.rotation += 0.2
+
+        currentAngle += diff * 0.001;
+
+        currentAngle %= 2 * Math.PI;
+
+      }
+
+      move() {
+
+        if (this.y_position + this.radius >= canvasHeight || this.y_position - this.radius <= 0) {
+          // console.log("Ball hit side of canvas");
+          this.y_velocity = -this.y_velocity;
+          this.Direction = !this.Direction;
+        }
+
+        if (this.x_position + this.radius >= canvasWidth || this.x_position - this.radius <= 0) {
+          // console.log("Ball hit side of canvas");
+          this.x_velocity = -this.x_velocity;
+          // this.Direction = !this.Direction;
+        }
+
+        this.y_position += this.y_velocity;
+        this.x_position += this.x_velocity;
+
+      }
+    }
+
+    one = new Ball(160,90, 9, 9, 60);
+    two = new Ball(170, 70, 5, 1, 40);
+
+    // A function to repeat every time the animation loops.
+    function repeatme() {
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+      one.draw();
+      two.draw();
+
+      one.move();
+      two.move();
+
+      window.requestAnimationFrame(repeatme);
+    }
+
+    repeatme();
+  </script>
+</body>
+
+</html>
