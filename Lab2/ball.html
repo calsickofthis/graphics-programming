@@ -94,7 +94,7 @@
 
         ctx.stroke();
 
-        if(this.Direction == true){
+        if(this.Direction == false){
           angle = (angle + 1) % 360;
         }else{
           angle = (angle - 1) % 360;
@@ -139,7 +139,7 @@
         if (this.x_position + this.radius >= canvasWidth || this.x_position - this.radius <= 0) {
           // console.log("Ball hit side of canvas");
           this.x_velocity = -this.x_velocity;
-          this.Direction = !this.Direction;
+          // this.Direction = !this.Direction;
         }
 
         this.y_position += this.y_velocity;
@@ -148,13 +148,13 @@
       }
     }
 
-    one = new Ball(20, 20, 9, 9, 10);
-    two = new Ball(40, 40, 5, 1, 20);
+    one = new Ball(160,90, 9, 9, 60);
+    two = new Ball(170, 70, 5, 1, 40);
 
-    three = new Ball(15, 120, 9, 9, 10);
+    three = new Ball(115, 120, 9, 9, 20);
     four = new Ball(140, 40, 5, 1, 20);
 
-    five = new Ball(15, 220, 9, 9, 10);
+    five = new Ball(215, 220, 9, 9, 20);
     six = new Ball(140, 140, 5, 1, 100);
     // A function to repeat every time the animation loops.
     function repeatme() {
