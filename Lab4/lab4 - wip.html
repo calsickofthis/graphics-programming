@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+  <style type="text/css">
+    body {
+      background-color: white;
+    }
+
+    canvas {
+      border: 3px dashed black;
+    }
+  </style>
+
+</head>
+
+<body>
+  <h1>Caolán Maguire</h1>
+  <canvas id="canvas-for-ball" width="650" height="300"></canvas>
+  <script type="text/javascript">
+
+    var location_of_paddles = {}
+
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvas-for-ball");
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
+
+    var canvasWidth = canvas.getBoundingClientRect().width;
+    var canvasHeight = canvas.getBoundingClientRect().height;
+
+    var startAngle = (2 * Math.PI);
+    var endAngle = (Math.PI * 1.5);
+    var currentAngle = 0;
+
+    // Create an object:
+    // Constructor function for Ball objects
+
+    class Ball {
+
+      //constructor written below - with position and velocity and radius to be set
+      // ball = new Ball(160, 90, 9, 25, 50,'blue');
+      constructor(x_position, y_position, x_velocity, y_velocity, radius, colour) {
+        this.x_position = x_position;
+        this.y_position = y_position;
+        this.x_velocity = x_velocity;
+        this.y_velocity = y_velocity;
+        this.radius = radius;
+        this.Direction = true;
+        this.rotation = 0.2;
+        this.angle = 0;
+        this.colour = colour
+
+      }
+
+      // draw method for ball
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x_position, this.y_position, this.radius, 0, 2 * Math.PI, true);
+        ctx.strokeStyle = this.colour;
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        var theta = 0.5
+
+        //Draw the X
+        //Bottom Right
+        var x1 = this.x_position + (this.radius * Math.cos(((7 * Math.PI) / 4)));
+        var y1 = this.y_position + (this.radius * Math.sin(((7 * Math.PI) / 4)));
+
+        //Top left
+        var x2 = this.x_position + (this.radius * Math.cos(((3 * Math.PI) / 4)));
+        var y2 = this.y_position + (this.radius * Math.sin(((3 * Math.PI) / 4)));
+
+        ctx.stroke();
+
+        var x3 = this.x_position + (this.radius * Math.cos(((5 * Math.PI) / 4)));
+        var y3 = this.y_position + (this.radius * Math.sin(((5 * Math.PI) / 4)));
+
+        var x4 = this.x_position + (this.radius * Math.cos(((1 * Math.PI) / 4)));
+        var y4 = this.y_position + (this.radius * Math.sin(((1 * Math.PI) / 4)));
+
+        ctx.stroke();
+
+        if (this.Direction == false) {
+          this.angle = (this.angle + 1) % 360;
+        } else {
+          this.angle = (this.angle - 1) % 360;
+        }
+
+        ctx.save();
+        ctx.fillStyle = this.colour;
+
+        ctx.translate(this.x_position, this.y_position); // First translate the context to the center you wish to rotate around.
+        ctx.rotate(this.angle * Math.PI / 180); // Then do the actual rotation.
+        ctx.translate(- this.x_position, - this.y_position); // Then translate the context back.
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke()
+        ctx.moveTo(x3, y3);
+        ctx.lineTo(x4, y4);
+        ctx.stroke()
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+
+        // this.rotation += 0.2
+      }
+
+      // move method
+      move() {
+
+        // if hit side of op or bottom
+        if (this.y_position + this.radius >= canvasHeight || this.y_position - this.radius <= 0) {
+          this.y_velocity = -this.y_velocity;
+          this.Direction = !this.Direction;
+        }
+
+        if (this.x_position + this.radius >= canvasWidth || this.x_position - this.radius <= 0) {
+          this.x_velocity = -this.x_velocity;
+
+          // const canvas = document.getElementById("myCanvas");
+          // const ctx = canvas.getContext("2d");
+
+        }
+
+        var path = new Path2D();
+        path.rect(paddle.x_position, paddle.y_position, paddle.paddle_radius + this.radius, paddle.paddle_radius + this.radius);
+
+        if (ctx.isPointInPath(path, this.x_position, this.y_position)) {
+          console.log('woah!')
+          this.x_velocity = -this.x_velocity;
+          ctx.font = "30px Arial";
+          ctx.fillText("Hello World", 10, 50);
+          // this.y_velocity = -this.y_velocity;
+        }
+
+        const ground = ctx.canvas.height;
+        const side = ctx.canvas.width;
+
+        const gravity = { x: 0, y: 0.1 };
+        const bounce = 0.9;
+
+        this.x_velocity += gravity.x;
+        this.y_velocity += gravity.y;
+        this.x_position += this.x_velocity;
+        this.y_position += this.y_velocity;
+        const g = ground - this.radius; // adjust for size
+
+        if (this.y_position >= g) {
+          this.y_position = g - (this.y_position - g); // 
+          this.y_velocity = -Math.abs(this.y_velocity) * bounce;
+          if (this.y_velocity >= -gravity.y) {  // check for rest.
+            this.y_velocity = 0;
+            this.y_position = g - gravity.y;
+          }
+        }
+
+        // this.x_velocity -= this.x_velocity;
+
+        // this.x_position = this.x_velocity;
+        // this.y_position = this.y_velocity;
+
+      }
+    }
+
+
+    // Create an object:
+    // Constructor function for Paddle objects
+    class Paddle {
+
+      // constructor written below - with position and height of paddle able to change on creation - will add colour soon
+      constructor(x_position, y_position, paddle_radius, paddle_colour) {
+        this.x_position = x_position;
+        this.y_position = y_position;
+        // this.paddle_width = paddle_width;
+        // this.paddle_height = paddle_height;
+        this.paddle_colour = paddle_colour;
+        this.paddle_radius = paddle_radius//this.paddle_height// * this.paddle_width;
+      }
+
+      // draw method
+      draw() {
+
+
+        // ctx.beginPath();
+        // ctx.strokeStyle = this.paddle_colour;
+        // ctx.fillStyle = this.paddle_colour;
+
+        // ctx.fillRect(this.x_position, this.y_position, this.paddle_width, this.paddle_height, false)
+        // ctx.stroke();
+
+        // var theta = 0.5
+
+        // ctx.save();
+        // ctx.fillStyle = "black";
+
+        ctx.beginPath();
+        ctx.strokeStyle = this.paddle_colour;
+        ctx.fillStyle = this.paddle_colour;
+        ctx.arc(this.x_position, this.y_position, this.paddle_radius, 0, Math.PI * 2);
+        ctx.fill(); // fill() is to fill in the circle, stroke() is for a empty circle.
+
+      }
+
+      move(direction, move) {
+        if (direction == 'x') {
+          this.x_position += move;
+        } else {
+          this.y_position += move;
+        }
+      }
+    }
+
+
+    // create paddles and ball
+    paddle = new Paddle(50, 0, 25, 'pink');
+    secondpaddle = new Paddle(300, 10, 25, 'orange');
+    ball = new Ball(160, 90, 9, 25, 50, 'pink');
+
+    secondball = new Ball(160, 140, 9, 25, 25, 'red');
+
+    // A function to repeat every time the animation loops.
+    function repeatme() {
+      //clear the canvas
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+      //draw first paddle
+      paddle.draw();
+      //draw second paddle
+      secondpaddle.draw();
+
+      // draw ball
+      ball.draw();
+
+      secondball.draw();
+
+      // move ball
+      ball.move();
+      secondball.move();
+
+      location_of_paddles['paddle'] = { 'x': paddle.x_position, 'y': paddle.y_position, 'radius': paddle.paddle_radius }//{ball.x_position,ball.y_position};
+      location_of_paddles['secondpaddle'] = { 'x': secondpaddle.x_position, 'y': secondpaddle.y_position, 'radius': secondpaddle.paddle_radius }//{ball.x_position,ball.y_position};
+
+      // console.log(location_of_paddles)
+
+      window.requestAnimationFrame(repeatme);
+    }
+
+    repeatme();
+
+    //keypresses with jQuery - for both paddles and rotation
+    $(document.body).on('keydown', function (e) {
+      switch (e.which) {
+        // key code for left arrow
+        case 37:
+          paddle.move('x', -9);
+          secondpaddle.move('x', -9)
+          break;
+
+        // key code for right arrow
+        case 39:
+          paddle.move('x', 9);
+          secondpaddle.move('x', 9)
+          break;
+        case 38:
+          // paddle.move('y', -9);
+          secondpaddle.move('y', -9)
+          break;
+        case 40:
+          // paddle.move('y', 9);
+          secondpaddle.move('y', 9)
+          break;
+        // key e
+        case 69:
+          // console.log(ball.x_velocity)
+          ball.x_velocity = ball.x_velocity + 10;
+          // ball.y_velocity += 10;
+          // console.log(ball.x_velocity)
+          console.log(location_of_paddles)
+          break;
+
+
+        // if space key is entered -rotate pall to one side
+        case 32:
+          ball.angle += 10;
+          break;
+        // if enter key is entered -rotate pall to one side
+        case 13:
+          ball.angle -= 10;
+          break;
+      }
+    });
+
+
+    // For first paddle - moves along y axis with mouse
+    canvas.addEventListener("mousemove", function (event) {
+      paddle.y_position = event.clientY - 100;
+    });
+  </script>
+</body>
+
+</html>
