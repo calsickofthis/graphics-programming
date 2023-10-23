@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+    </style>
+    <script src="https://threejs.org/build/three.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement )
+
+
+        const geometry = new THREE.TetrahedronGeometry(5, 0);
+
+        // Set Wireframe property
+        //MeshLambertMaterial
+        //MeshBasicMaterial
+        const material = new THREE.MeshBasicMaterial({
+             color: 0x800080,//0xffff00,
+              wireframe: true
+            });
+        const tetrahedron = new THREE.Mesh(geometry, material);
+        scene.add(tetrahedron);
+
+        // add a spotlight
+        var spotLight = new THREE.SpotLight(0xffffff);
+        // spotLight.position.set(1, 0.5, 1);
+        spotLight.position.set(100, 1000, 100);
+        scene.add(spotLight);
+
+
+        camera.position.z = 15;
+
+        direction_of_travel = true;
+
+        var repeatMe = function () {
+            renderer.render(scene, camera);
+            requestAnimationFrame(repeatMe, tetrahedron.rotation.x += 0.1, tetrahedron.rotation.y += 0.1);
+
+            // console.log(tetrahedron.position.x)
+            // console.log(direction_of_travel);
+            if(direction_of_travel){
+                tetrahedron.position.x -= 0.1
+            }else{
+                tetrahedron.position.x += 0.1
+            }
+
+            if(tetrahedron.position.x < -15 || tetrahedron.position.x > 10){
+                direction_of_travel = !direction_of_travel;
+            }
+            
+        };
+        repeatMe();
+        </script>
+</body>
+
+</html> 
