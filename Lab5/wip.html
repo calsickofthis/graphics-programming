@@ -126,8 +126,12 @@
             // tetrahedron.material.color.g++;
             // tetrahedron.material.color.r++;
 
-            // console.log(tetrahedron)//.material.color)
+            tetrahedron.wireframeMaterial.color.r += tetrahedron.colorChangeSpeed;
+            tetrahedron.wireframeMaterial.color.g += tetrahedron.colorChangeSpeed;
+            tetrahedron.wireframeMaterial.color.b += tetrahedron.colorChangeSpeed;
 
+            // console.log(tetrahedron.material)//.material.color)
+            console.log(tetrahedron.wireframeMaterial.color.r)
         };
         repeatMe();
     </script>
