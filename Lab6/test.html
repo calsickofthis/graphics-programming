@@ -4,64 +4,129 @@
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
 
+<style>
+  body {
+    /* background-color: #222; */
+    font-family: arial, sans-serif;
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  .axis {
+    font: 10px sans-serif;
+  }
+
+  .axis text {
+    /*   stroke:tomato;
+  stroke-width : 1;   */
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    /*   stroke: tomato; */
+    shape-rendering: crispEdges;
+  }
+
+  .line {
+    fill: none;
+    stroke: red;
+    stroke-width: 3px;
+  }
+</style>
+
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 <script>
+  var dataset = [
+  // {Average: 315.71, date: "1958-03-01", DecimalDate: 1958.208, Interpolated: 315.71, NumberofDays: -1.0, Trend: 314.62},
+  // {"Average": 317.45, "Date": "1958-04-01", "Decimal Date": 1958.292, "Interpolated": 317.45, "Number of Days": -1.0, "Trend": 315.29},
+  // {"Average": 317.5, "Date": "1958-05-01", "Decimal Date": 1958.375, "Interpolated": 317.5, "Number of Days": -1.0, "Trend": 314.71}
+    { Average: "01/01/2016", pizzas: 10000 },
+    { Average: "01/02/2016", pizzas: 20000 },
+    { Average: "01/03/2016", pizzas: 40000 },
+    { Average: "01/04/2016", pizzas: 30000 },
+    // { date: "01/05/2016", pizzas: 30000 },
+    // { date: "01/06/2016", pizzas: 50000 },
+    // { date: "01/07/2016", pizzas: 30000 },
+    // { date: "01/08/2016", pizzas: 50000 },
+    // { date: "01/09/2016", pizzas: 60000 },
+    // { date: "01/10/2016", pizzas: 20000 },
+    // { date: "01/11/2016", pizzas: 10000 },
+    // { date: "01/12/2016", pizzas: 90000 },
+  ];
 
-    // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
-        width = 500 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
-    
-    // append the svg object to the body of the page
-    var svg = d3.select("#my_dataviz")
-      .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
-    
-    //Read the data
-    // d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+  // Calculate Margins and canvas dimensions
+  var margin = { top: 40, right: 40, bottom: 40, left: 60 },
+    width = 700 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
-    d3.json('https://pkgstore.datahub.io/core/co2-ppm/co2-mm-mlo_json/data/aed7eb0d19cbcd90790525d40728b0a8/co2-mm-mlo_json.json',
-    
-      // When reading the csv, I must format variables:
-      function(d){
-        console.log({d[0]['Average']})
-        return { date : d3.timeParse("%Y-%m-%d")(d['Date']), value : d['Average'] }
-      },
-    
-      // Now I can use this dataset:
-      function(data) {
-    
-        // Add X axis --> it is a date format
-        var x = d3.scaleTime()
-          .domain(d3.extent(data, function(d) { return d.date; }))
-          .range([ 0, width ]);
-        svg.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x));
-    
-        // Add Y axis
-        var y = d3.scaleLinear()
-          .domain([0, d3.max(data, function(d) { return +d.value; })])
-          .range([ height, 0 ]);
-        svg.append("g")
-          .call(d3.axisLeft(y));
-    
-        // Add the line
-        svg.append("path")
-          .datum(data)
-          .attr("fill", "none")
-          .attr("stroke", "steelblue")
-          .attr("stroke-width", 1.5)
-          .attr("d", d3.line()
-            .x(function(d) { return x(d.date) })
-            .y(function(d) { return y(d.value) })
-            )
-    
-    })
-    
-    </script>
+  //Parsers and Formaters
+  var parseTime = d3.timeParse("%d/%m/%Y");
+  var formatTime = d3.timeFormat("%a/%b/%Y");
+
+  // Scales
+  var x = d3.scaleTime()
+    .range([0, width]);
+
+  var y = d3.scaleLinear()
+    .range([height, 0]);
+
+  // Line
+  var line = d3.line()
+    .x(function (d) { return x(this.parseTime(d.Average)); })
+    .y(function (d) { return y(d.pizzas / 1000); })
+
+
+  var svg = d3.select("body").append("svg")
+    .style("background-color", '#ccc')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  //Arguments for axes : Ranges for X, y  
+  x.domain(d3.extent(dataset, function (d) { return parseTime(d.Average); }));
+  y.domain(d3.extent(dataset, function (d) { return d.pizzas / 1000; }));
+
+  // Axes
+  svg.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  svg.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y));
+  // Labels
+  svg.append("text")
+    .attr("text-anchor", "middle")
+    .style("font-size", "14px")
+    .attr("transform", "translate(" + (margin.left - 94) + "," + (height / 2) + ")rotate(-90)")
+    .text("Pizzas ( Thousands ) ");
+
+  svg.append("text")
+    .style("font-size", "14px")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + (width / 2) + "," + (height - (margin.bottom - 74)) + ")")
+    .text("Date");
+
+  //  Chart Title
+  svg.append("text")
+    .attr("x", (width / 2))
+    .attr("y", 20 - (margin.top / 2))
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .text("Caolán Maguire - G00385433@atu.ie");
+
+  // Data Lines:
+
+  svg.append("path")
+    .datum(dataset)
+    .attr("class", "line")
+    .attr("d", line);
+
+// See also :
+//https://github.com/d3/d3-shape/blob/master/README.md#lines
+//https://bl.ocks.org/mbostock/02d893e3486c70c4475f
+</script>
