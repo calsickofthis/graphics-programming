@@ -32,5 +32,10 @@ public class PlayerController : MonoBehaviour
 	Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 	
  	rb.AddForce(movement);
+
+        //Load a scene by the name "SceneName" if you press the W key.
+        if(Input.GetKeyDown(KeyCode.C)){
+            Application.LoadLevel("Load Page");
+        }
     }
 }
