@@ -22,11 +22,23 @@ for i in range(len(dst)):
 
 
 #Plot imgHarris
-cv2.imshow("Image",imgHarris)
+cv2.imshow("imgHarris",imgHarris)
 cv2.waitKey(0)
 
 # Shi Tomasi Algorithm
 corners = cv2.goodFeaturesToTrack(img_gray,10,0.01,10)
 
-print(corners)
+# Another Deep copy
+imgShiTomasi = copy.deepcopy(img_gray)
+
+for i in corners:
+    x,y = i.ravel()
+    print(x,y)
+    cv2.circle(imgShiTomasi,(x,y),3,( 70, 235, 52 ),-1)
+
+# print(corners)
+
+#Plot imgShiTomasi
+cv2.imshow("imgShiTomasi",imgShiTomasi)
+cv2.waitKey(0)
 
