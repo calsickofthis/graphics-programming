@@ -58,8 +58,6 @@ plt.title('imgShiTomasi'), plt.xticks([]), plt.yticks([])
 
 plt.show()
 
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
 
 # Feature Matching
 img1 = cv2.imread('monaghan.jpg',cv2.IMREAD_GRAYSCALE)# queryImage
@@ -79,8 +77,6 @@ matches = sorted(matches, key = lambda x:x.distance)
 # Draw first 10 matches.
 img3 = cv2.drawMatches(img1,kp1,img2,kp2,matches[:10],None,flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 cv2.imshow('comparison',img3)
-
-# split rgb channels
 
 # rows and columns for subplot
 nrows = 4
