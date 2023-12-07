@@ -18,25 +18,25 @@ threshold = 0.5; #number between 0 and 1
 for i in range(len(dst)):
     for j in range(len(dst[i])):
         if dst[i][j] > (threshold*dst.max()):
-            cv2.circle(imgHarris,(j,i),3,( 70, 235, 52 ),-1)
+            cv2.circle(imgHarris,(j,i),3,( 69, 3, 252 ),-1)
 
 
 #Plot imgHarris
 cv2.imshow("imgHarris",imgHarris)
-cv2.waitKey(0)
+# cv2.waitKey(0)
 
 # Shi Tomasi Algorithm
-corners = cv2.goodFeaturesToTrack(img_gray,10,0.01,10)
+corners = cv2.goodFeaturesToTrack(img_gray,100,0.01,10)
 
 # Another Deep copy
 imgShiTomasi = copy.deepcopy(img_gray)
 
+# plotting ShiTomasi algorithm corners on image
 for i in corners:
     x,y = i.ravel()
-    print(x,y)
-    cv2.circle(imgShiTomasi,(x,y),3,( 70, 235, 52 ),-1)
+    cv2.circle(imgShiTomasi,(int(x),int(y)),3,( 69, 3, 252 ),-1)
 
-# print(corners)
+
 
 #Plot imgShiTomasi
 cv2.imshow("imgShiTomasi",imgShiTomasi)
